@@ -9,7 +9,7 @@
             margin: 0;
             overflow: hidden;
             font-family: 'Arial', 'Helvetica', sans-serif; /* Веб-безопасные шрифты */
-            background-image: url('background.png'); /* Относительный путь к картинке */
+            background-image: url('background.jpg'); /* Относительный путь к картинке */
             background-size: cover;
             background-position: center;
             display: flex;
@@ -101,7 +101,7 @@
 
             let wordTop = 0;
             const wordFall = setInterval(() => {
-                wordTop += 2;
+                wordTop += 4; /* Увеличиваем скорость падения слов */
                 word.style.top = `${wordTop}px`;
 
                 // Проверка пересечения слова и ловушки
@@ -125,7 +125,7 @@
             score = 0;
             scoreElement.textContent = `Счёт: ${score}`;
             startButton.style.display = 'none';
-            gameInterval = setInterval(createWord, 1000);
+            gameInterval = setInterval(createWord, 1500); /* Увеличиваем интервал между появлением слов */
         }
 
         document.addEventListener('mousemove', (e) => {
