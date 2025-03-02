@@ -53,14 +53,22 @@
             color: #333;
         }
 
-        .game-over {
+        .start-button {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 36px;
-            color: #ff0000;
-            display: none;
+            padding: 10px 20px;
+            font-size: 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .start-button:hover {
+            background-color: #45a049;
         }
     </style>
 </head>
@@ -68,14 +76,14 @@
     <div class="game-container">
         <div class="score">Счёт: 0</div>
         <div class="catcher"></div>
-        <div class="game-over">Игра окончена!</div>
+        <button class="start-button">Начать игру</button>
     </div>
 
     <script>
         const gameContainer = document.querySelector('.game-container');
         const catcher = document.querySelector('.catcher');
         const scoreElement = document.querySelector('.score');
-        const gameOverElement = document.querySelector('.game-over');
+        const startButton = document.querySelector('.start-button');
 
         let score = 0;
         let gameInterval;
@@ -99,23 +107,23 @@
                         scoreElement.textContent = `Счёт: ${score}`;
                     } else {
                         clearInterval(wordFall);
-                        gameOver();
+                        stopGame();
                     }
                     word.remove();
                 }
             }, 20);
         }
 
-        function gameOver() {
+        function stopGame() {
             clearInterval(gameInterval);
             clearInterval(wordInterval);
-            gameOverElement.style.display = 'block';
+            startButton.style.display = 'block';
         }
 
         function startGame() {
             score = 0;
             scoreElement.textContent = `Счёт: ${score}`;
-            gameOverElement.style.display = 'none';
+            startButton.style.display = 'none';
             gameInterval = setInterval(createWord, 1000);
         }
 
@@ -124,7 +132,9 @@
             catcher.style.left = `${x - 50}px`;
         });
 
-        startGame();
+        startButton.addEventListener('click', () => {
+            startGame();
+        });
     </script>
 </body>
 </html>
