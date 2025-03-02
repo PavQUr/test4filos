@@ -87,7 +87,6 @@
 
         let score = 0;
         let gameInterval;
-        let wordInterval;
 
         function createWord() {
             const word = document.createElement('div');
@@ -105,19 +104,11 @@
                     if (word.offsetLeft > catcher.offsetLeft && word.offsetLeft < catcher.offsetLeft + 100) {
                         score++;
                         scoreElement.textContent = `Счёт: ${score}`;
-                    } else {
-                        clearInterval(wordFall);
-                        stopGame();
                     }
                     word.remove();
+                    clearInterval(wordFall);
                 }
             }, 20);
-        }
-
-        function stopGame() {
-            clearInterval(gameInterval);
-            clearInterval(wordInterval);
-            startButton.style.display = 'block';
         }
 
         function startGame() {
