@@ -1,119 +1,130 @@
-<div class="tic-tac-toe">
-  <h2>Крестики-нолики</h2>
-  <div class="board">
-    <div class="cell" data-index="0"></div>
-    <div class="cell" data-index="1"></div>
-    <div class="cell" data-index="2"></div>
-    <div class="cell" data-index="3"></div>
-    <div class="cell" data-index="4"></div>
-    <div class="cell" data-index="5"></div>
-    <div class="cell" data-index="6"></div>
-    <div class="cell" data-index="7"></div>
-    <div class="cell" data-index="8"></div>
-  </div>
-  <button id="reset">Начать заново</button>
-</div>
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ловец слов</title>
+    <style>
+        body {
+            margin: 0;
+            overflow: hidden;
+            font-family: Arial, sans-serif;
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
 
-<style>
-  .tic-tac-toe {
-    text-align: center;
-    font-family: Arial, sans-serif;
-  }
-  .board {
-    display: grid;
-    grid-template-columns: repeat(3, 100px);
-    grid-gap: 5px;
-    margin: 20px auto;
-    width: max-content;
-  }
-  .cell {
-    width: 100px;
-    height: 100px;
-    background-color: #f0f0f0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 24px;
-    cursor: pointer;
-    border: 1px solid #ccc;
-  }
-  .cell.X::before {
-    content: "X";
-    color: #ff6347;
-  }
-  .cell.O::before {
-    content: "O";
-    color: #4682b4;
-  }
-  #reset {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 5px;
-  }
-  #reset:hover {
-    background-color: #45a049;
-  }
-</style>
+        .game-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background-color: #fff;
+            border: 2px solid #ccc;
+            overflow: hidden;
+        }
 
-<script>
-  let currentPlayer = 'X';
-  let board = Array(9).fill(null);
+        .word {
+            position: absolute;
+            top: -50px;
+            font-size: 20px;
+            color: #333;
+            user-select: none;
+        }
 
-  const cells = document.querySelectorAll('.cell');
-  const resetButton = document.getElementById('reset');
+        .catcher {
+            position: absolute;
+            bottom: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100px;
+            height: 20px;
+            background-color: #4CAF50;
+            border-radius: 10px;
+            cursor: pointer;
+        }
 
-  cells.forEach(cell => {
-    cell.addEventListener('click', handleCellClick);
-  });
+        .score {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            font-size: 24px;
+            color: #333;
+        }
 
-  resetButton.addEventListener('click', resetGame);
+        .game-over {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 36px;
+            color: #ff0000;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="score">Счёт: 0</div>
+        <div class="catcher"></div>
+        <div class="game-over">Игра окончена!</div>
+    </div>
 
-  function handleCellClick(event) {
-    const cell = event.target;
-    const index = cell.getAttribute('data-index');
+    <script>
+        const gameContainer = document.querySelector('.game-container');
+        const catcher = document.querySelector('.catcher');
+        const scoreElement = document.querySelector('.score');
+        const gameOverElement = document.querySelector('.game-over');
 
-    if (board[index] || checkWinner()) return;
+        let score = 0;
+        let gameInterval;
+        let wordInterval;
 
-    board[index] = currentPlayer;
-    cell.classList.add(currentPlayer);
+        function createWord() {
+            const word = document.createElement('div');
+            word.classList.add('word');
+            word.textContent = ['HTML', 'CSS', 'JS', 'PHP', 'Python', 'Java'][Math.floor(Math.random() * 6)];
+            word.style.left = `${Math.random() * (gameContainer.offsetWidth - 50)}px`;
+            gameContainer.appendChild(word);
 
-    if (checkWinner()) {
-      alert(`Игрок ${currentPlayer} победил!`);
-      resetGame();
-      return;
-    }
+            let wordTop = 0;
+            const wordFall = setInterval(() => {
+                wordTop += 2;
+                word.style.top = `${wordTop}px`;
 
-    if (board.every(cell => cell !== null)) {
-      alert('Ничья!');
-      resetGame();
-      return;
-    }
+                if (wordTop + 50 > gameContainer.offsetHeight - 30) {
+                    if (word.offsetLeft > catcher.offsetLeft && word.offsetLeft < catcher.offsetLeft + 100) {
+                        score++;
+                        scoreElement.textContent = `Счёт: ${score}`;
+                    } else {
+                        clearInterval(wordFall);
+                        gameOver();
+                    }
+                    word.remove();
+                }
+            }, 20);
+        }
 
-    currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
-  }
+        function gameOver() {
+            clearInterval(gameInterval);
+            clearInterval(wordInterval);
+            gameOverElement.style.display = 'block';
+        }
 
-  function checkWinner() {
-    const winningCombinations = [
-      [0, 1, 2], [3, 4, 5], [6, 7, 8], // строки
-      [0, 3, 6], [1, 4, 7], [2, 5, 8], // столбцы
-      [0, 4, 8], [2, 4, 6]             // диагонали
-    ];
+        function startGame() {
+            score = 0;
+            scoreElement.textContent = `Счёт: ${score}`;
+            gameOverElement.style.display = 'none';
+            gameInterval = setInterval(createWord, 1000);
+        }
 
-    return winningCombinations.some(combination => {
-      const [a, b, c] = combination;
-      return board[a] && board[a] === board[b] && board[a] === board[c];
-    });
-  }
+        document.addEventListener('mousemove', (e) => {
+            const x = e.clientX - gameContainer.getBoundingClientRect().left;
+            catcher.style.left = `${x - 50}px`;
+        });
 
-  function resetGame() {
-    board.fill(null);
-    cells.forEach(cell => {
-      cell.classList.remove('X', 'O');
-    });
-    currentPlayer = 'X';
-  }
-</script>
+        startGame();
+    </script>
+</body>
+</html>
