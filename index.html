@@ -8,7 +8,7 @@
         body {
             margin: 0;
             overflow: hidden;
-            font-family: 'Arial', 'Helvetica', sans-serif; /* Веб-безопасные шрифты */
+            font-family: 'Courier', 'Helvetica', sans-serif; /* Веб-безопасные шрифты */
             background-image: url('background.png'); /* Относительный путь к картинке */
             background-size: cover;
             background-position: center;
@@ -117,7 +117,7 @@
         function createWord() {
             const word = document.createElement('div');
             word.classList.add('word');
-            word.textContent = ['HTML', 'CSS', 'JS', 'PHP', 'Python', 'Java'][Math.floor(Math.random() * 6)];
+            word.textContent = ['Матпомощь', 'Профсоюз', 'Стипендия', 'Скидки', 'Семья', 'ПГАС', 'Возможости', 'Защита', 'Конкурсы', 'Мероприятия'][Math.floor(Math.random() * 10)];
             word.style.left = `${Math.random() * (gameContainer.offsetWidth - 50)}px`;
             gameContainer.appendChild(word);
 
