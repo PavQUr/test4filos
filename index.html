@@ -9,7 +9,7 @@
             margin: 0;
             overflow: hidden;
             font-family: 'Arial', 'Helvetica', sans-serif; /* Веб-безопасные шрифты */
-            background-image: url('background.png'); /* Относительный путь к картинке */
+            background-image: url('background.jpg'); /* Относительный путь к картинке */
             background-size: cover;
             background-position: center;
             display: flex;
@@ -40,9 +40,9 @@
             left: 50%;
             transform: translateX(-50%);
             width: 120px;
-            height: 20px;
+            height: 30px; /* Увеличим высоту корзины */
             background-color: #8A2BE2; /* Фиолетовый цвет */
-            border-radius: 10px;
+            border-radius: 15px; /* Закруглим углы */
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
             cursor: pointer;
         }
@@ -73,6 +73,28 @@
 
         .start-button:hover {
             background-color: #7B1FA2; /* Темнее фиолетовый при наведении */
+        }
+
+        /* Адаптация для мобильных устройств */
+        @media (max-width: 600px) {
+            .catcher {
+                width: 100px; /* Уменьшим ширину корзины для мобильных устройств */
+                height: 25px; /* Уменьшим высоту корзины для мобильных устройств */
+                bottom: 10px; /* Поднимем корзину выше */
+            }
+
+            .word {
+                font-size: 20px; /* Уменьшим размер шрифта для мобильных устройств */
+            }
+
+            .score {
+                font-size: 24px; /* Уменьшим размер шрифта счёта */
+            }
+
+            .start-button {
+                font-size: 20px; /* Уменьшим размер шрифта кнопки */
+                padding: 10px 20px; /* Уменьшим отступы кнопки */
+            }
         }
     </style>
 </head>
