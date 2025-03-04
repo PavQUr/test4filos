@@ -128,9 +128,39 @@
             gameInterval = setInterval(createWord, 1500); /* Увеличиваем интервал между появлением слов */
         }
 
+        // Управление корзиной на мобильных устройствах
+        let isDragging = false;
+
+        catcher.addEventListener('touchstart', (e) => {
+            isDragging = true;
+        });
+
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                const touch = e.touches[0];
+                const x = touch.clientX - gameContainer.getBoundingClientRect().left;
+                const catcherWidth = catcher.offsetWidth;
+                const containerWidth = gameContainer.offsetWidth;
+
+                // Ограничиваем движение корзины в пределах экрана
+                const newX = Math.max(0, Math.min(x - catcherWidth / 2, containerWidth - catcherWidth));
+                catcher.style.left = `${newX}px`;
+            }
+        });
+
+        document.addEventListener('touchend', () => {
+            isDragging = false;
+        });
+
+        // Управление корзиной на ПК (мышь)
         document.addEventListener('mousemove', (e) => {
             const x = e.clientX - gameContainer.getBoundingClientRect().left;
-            catcher.style.left = `${x - 60}px`; /* Центрируем ловушку */
+            const catcherWidth = catcher.offsetWidth;
+            const containerWidth = gameContainer.offsetWidth;
+
+            // Ограничиваем движение корзины в пределах экрана
+            const newX = Math.max(0, Math.min(x - catcherWidth / 2, containerWidth - catcherWidth));
+            catcher.style.left = `${newX}px`;
         });
 
         startButton.addEventListener('click', () => {
