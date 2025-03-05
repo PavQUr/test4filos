@@ -36,7 +36,7 @@
 
         .catcher {
             position: absolute;
-            bottom: 10%;
+            bottom: 10%; /* Корзина приподнята */
             left: 50%;
             transform: translateX(-50%);
             width: 120px;
@@ -117,7 +117,7 @@
         function createWord() {
             const word = document.createElement('div');
             word.classList.add('word');
-            word.textContent = ['Матпомощь', 'Профсоюз', 'Стипендия', 'Скидки', 'Семья', 'ПГАС', 'Возможости', 'Защита', 'Конкурсы', 'Мероприятия'][Math.floor(Math.random() * 10)];
+            word.textContent = ['Матпомощь', 'Профсоюз', 'Стипендия', 'Скидки', 'Семья', 'ПГАС', 'Возможности', 'Защита', 'Конкурсы', 'Мероприятия'][Math.floor(Math.random() * 10)];
             word.style.left = `${Math.random() * (gameContainer.offsetWidth - 50)}px`;
             gameContainer.appendChild(word);
 
@@ -126,8 +126,12 @@
                 wordTop += 4; /* Увеличиваем скорость падения слов */
                 word.style.top = `${wordTop}px`;
 
+                // Высота, на которой слова исчезают (учитываем высоту корзины)
+                const catcherTop = catcher.offsetTop;
+                const wordBottom = wordTop + word.offsetHeight;
+
                 // Проверка пересечения слова и ловушки
-                if (wordTop + 20 >= gameContainer.offsetHeight - 30) {
+                if (wordBottom >= catcherTop) {
                     const catcherLeft = catcher.offsetLeft;
                     const catcherRight = catcherLeft + catcher.offsetWidth;
                     const wordLeft = word.offsetLeft;
